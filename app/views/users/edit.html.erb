@@ -1,0 +1,58 @@
+<% provide(:page_title, 'Edit Your Profile') %>
+<%= render partial: "shared/navbar_edit", locals: { user: current_user } %>
+<div class="row">
+	<div class="col-md-4">
+		<div class="edit_head">
+			<h5>Edit Your Profile</h5>
+		</div>
+	</div>
+</div>
+<div class="row justify-content-center">
+	<div class="col-md-8">
+		<form action="/users" method="post">
+			<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<input type="hidden" name="_method" value="patch">
+
+			<div class="form-group row">
+				<label for="first_name" class="col-sm-4 col-form-label">First Name</label>
+				<div class="col-sm-6">
+					<input type="text" id="first_name" name="user[first_name]" value="<%= @user.first_name %>" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="last_name" class="col-sm-4 col-form-label">Last Name</label>
+				<div class="col-sm-6">
+					<input type="text" id="last_name" name="user[last_name]" value="<%= @user.last_name%>" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="email" class="col-sm-4 col-form-label">Email</label>
+				<div class="col-sm-6">
+					<input type="text" id="email" name="user[email]" value="<%= @user.email %>" class="form-control">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="location" class="col-sm-4 col-form-label">Location</label>
+				<div class="col-sm-4">
+					<input type="text" id="city" name="user[city]" class="form-control" value="<%= @user.city %>">
+				</div>
+				<select name="user[state]" id="state" class="form-control col-sm-2">
+					<% states.each do |key, state| %>
+						<option value="<%= state %>" id="state" <% if state == @user.state %> selected="selected" <% end %> >
+							<%= state %>	
+						</option>
+					<% end %>
+				</select>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-2 offset-sm-10">
+					<input type="submit" class="btn btn-default" value="Update">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

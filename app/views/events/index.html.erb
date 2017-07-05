@@ -1,0 +1,181 @@
+<% provide(:page_title, 'Dashboard') %>
+
+<div class="nav_row">
+	<div class="container">
+		<ul class="nav justify-content-end">
+			<li class="nav-item">
+					<%= link_to "Edit My Profile", edit_user_path( current_user.id ), :class => "nav-link" %>
+			</li>
+			<li class="nav-item">
+				<%= link_to "Logout", session_path(current_user.id), :method => :delete , :class => "nav-link" %>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<h1 class="display-4"><%= "Welcome, #{current_user.first_name}!" %></h1>
+</div>
+
+
+<div class="row">
+ 	<p class="h3">Here are some of the events in your state:</p>
+</div>
+<div class="row">
+	<table class="table table-responsive table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Date</th>
+				<th>City</th>
+				<th>State</th>
+				<th>Time</th>
+				<th>Host</th>
+				<th>Action/Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @events.where(state: current_user.state).each do |event| %>
+				<tr>
+					<td><%= link_to "#{event.name}", event_path(event) %></td>
+					<td><%= event_date(event.date) %></td>
+					<td><%= event.city %></td>
+					<td><%= event.state%></td>
+					<td><%= event_time(event.time) %></td>
+					<td><%= event.user.first_name %></td>
+					<td>
+						<ul class="list-inline">
+							<div class="d-sm-inline-flex">
+								<% if event.user != current_user  %>
+									<li class="list-inline-item">
+										<%= link_to_if(current_user.users_events.find_by(event: event).nil?,"Join", users_events_path(:event_id => event.id), :method => :post ) %>
+									</li>
+								
+									<% if current_user.users_events.find_by(event: event)%>
+										<li class="list-inline-item active">Joined</li>
+										<li class="list-inline-item"><%= link_to "Cancel", current_user.users_events.find_by(event: event) , method: :delete , :data=> { :confirm => "Are you sure?" } %>
+										</li>
+									<% end %>
+
+								<% else %>
+									<li class="list-inline-item"><%= link_to "Edit", edit_event_path(event.id) %></li>
+									<li class="list-inline-item"><%= link_to "Delete", event, :method => :delete, :data => { :confirm => "Are you sure about that?" } %></li>
+								<% end %>
+							</div>
+						</ul>	
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
+
+<div class="row">
+	<p class="h3">Here are some of the events in other states:</p>
+</div>
+
+<div class="row">
+	<table class="table table-responsive table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Date</th>
+				<th>City</th>
+				<th>State</th>
+				<th>Time</th>
+				<th>Host</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+		<% @events.where.not(state: current_user.state).each do |event| %>
+			<tr>
+				<td><%= link_to "#{event.name}", event_path(event) %></td>
+				<td><%= event_date(event.date) %></td>
+				<td><%= event.city  %></td>
+				<td><%= event.state %></td>
+				<td><%= event_time(event.time) %></td>
+				<td><%= event.user.first_name%></td>
+				<td>
+					<ul class="list-inline">
+						<div class="d-sm-inline-flex">
+							<% if event.user != current_user %>
+								<% if current_user.users_events.find_by(event: event).nil? %>
+									<li class="list-inline-item">
+										<%= link_to "Join", users_events_path(:event_id => event.id), :method => :post %>
+									</li>
+								<% else %>
+									<li class="list-inline-item active">Joined</li>
+									<li class="list-inline-item">
+										<%= link_to "Cancel", current_user.users_events.find_by(event: event), :method => :delete , :data => { :confirm => "Are you sure?" } %>
+									</li>
+								<% end %>
+							<% else %>
+								<li class="list-inline-item">
+									<%= link_to "Edit", edit_event_path(event.id)%>
+								</li>
+								<li class="list-inline-item">
+									<%= link_to "Delete", event, :method => :delete , :data => { :confirm => "Are you sure about that?" } %>
+								</li>
+							<% end %>
+						</div>
+					</ul>
+				</td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-header">
+			<p class="h4">Add Event</p>
+		</div>
+
+		<form action="/events" method="post">
+			<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<div class="form-group row">
+				<label for="name" class="col-sm-4 col-form-label">Event Name</label>
+				<div class="col-sm-7">
+					<input type="text" class="form-control" id="name" name="event[name]">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="date" class="col-sm-4 col-form-label">Date</label>
+				<div class="col-sm-5">
+					<input type="date" class="form-control" id="date" name="event[date]">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="location" class="col-sm-4 col-form-label">Location</label>
+				<div class="col-sm-5">
+					<input type="text" id="city" name="event[city]" class="form-control">
+				</div>
+				<select name="event[state]" id="state" class="form-control col-sm-2">
+					<% states.each  do |key, state| %>
+						<option value="<%= state %>" id="state">
+							<%= state %>
+						</option>
+					<% end %>
+				</select>
+			</div>
+
+			<div class="form-group row">
+				<label for="time" class="col-sm-4 col-form-label">Time</label>
+				<div class="col-sm-5">
+					<input type="time" class="form-control" id="time" name="event[time]">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-2">
+					<input type="submit" class="btn btn-default" value="Add Event">
+				</div>
+			</div>
+			
+		</form>
+	</div>
+</div>
+

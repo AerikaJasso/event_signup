@@ -1,0 +1,61 @@
+<% provide(:page_title, 'Edit Event') %>
+<%= render partial: "shared/navbar_edit", locals: { user: current_user } %>
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="edit_head">
+			<h5>Edit Your Event</h5>
+		</div>
+	</div>
+</div>
+
+<div class="row justify-content-center">
+	<div class="col-md-8">
+		<form action="/events/<%= @event.id %>" method="post">
+			<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<input type="hidden" name="_method" value="patch">
+
+			<div class="form-group row">
+				<label for="name" class="col-sm-4 col-form-label">Event Name</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="name" name="event[name]" value="<%= @event.name %>">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="date" class="col-sm-4 col-form-label">Date</label>
+				<div class="col-sm-5">
+					<input type="date" class="form-control" id="date" name="event[date]" value="<%= @event.date %>">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="location" class="col-sm-4 col-form-label">Location</label>
+				<div class="col-sm-4">
+					<input type="text" id="city" name="event[city]" class="form-control" value="<%= @event.city %>">
+				</div>
+				<select name="event[state]" id="state" class="form-control col-sm-2">
+					<% states.each do |key, state| %>
+						<option value="<%= state %>" id="state" <% if state == @event.state %> selected="selected" <% end %> >
+							<%= state %>	
+						</option>
+					<% end %>
+				</select>
+			</div>
+
+			<div class="form-group row">
+				<label for="time" class="col-sm-4 col-form-label">Time</label>
+				<div class="col-sm-4">
+					<input type="time" class="form-control" id="time" name="event[time]" value="<%= @event.time.strftime("%H:%M") %>"> 
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-sm-2">
+					<input type="submit" class="btn btn-default" value="Update Event">
+				</div>
+			</div>	
+
+		</form>
+	</div>
+</div>
