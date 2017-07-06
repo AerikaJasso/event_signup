@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$main-color: #8DC0CC;
+$main-color: #ede4da;
 
 body{
 	background-color: $main-color;
@@ -16,12 +16,14 @@ body{
 	margin-bottom: 40px;
 
 }
+
 .container.users.edit{
 	background-color: #FFF;
 	padding: 10px;
 	margin: 0 auto;
 	margin-top: 35px;
 }
+
 .container.events.show{
 	background-color: #FFF;
 	padding: 10px;
@@ -29,8 +31,9 @@ body{
 	margin-top: 35px;
 	margin-bottom: 40px;
 }
+
 h1.display-4{
-	color: #7F7764;
+	color: #595045;
 	font-size: 45px;
 }
 
@@ -46,4 +49,11 @@ h1.display-4{
 .card-block{
 	overflow-y:auto;
 	height: 300px
+}
+
+.edit_head{
+	h5{
+	margin: 5px 0 5px 140px;
+	align: inline;
+	}
 }
