@@ -3,13 +3,14 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 $main-color: #ede4da;
+$controller-color: #fcfcfc;
 
 body{
 	background-color: $main-color;
 }
 
 .container.events.index{
-	background-color: #FFF;
+	background-color: $controller-color;
 	padding: 0 25px 25px 25px;
 	margin: 0 auto;
 	margin-top: 35px;
@@ -18,14 +19,14 @@ body{
 }
 
 .container.users.edit{
-	background-color: #FFF;
+	background-color: $controller-color;
 	padding: 10px;
 	margin: 0 auto;
 	margin-top: 35px;
 }
 
 .container.events.show{
-	background-color: #FFF;
+	background-color: $controller-color;
 	padding: 10px;
 	margin: 0 auto;
 	margin-top: 35px;
@@ -58,6 +59,4 @@ h1.display-4{
 	}
 }
 
-.event_comment{
-	align: top;
-}
+
